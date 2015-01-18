@@ -38,13 +38,13 @@ class UpdateWiki extends DefaultTask {
         onlyIf { anyDependsOnTasksDidWork && allDependsOnTasksWereOK }
 
         // 0
-        registerDependencyTaskForField('TeamLink') { selectedOption = config.team.name }
+        fieldTask('TeamLink') { selectedOption = config.team.name }
         // TODO: drop merge date
         // TODO: drop merge revision
         // TODO: Functional description
 
         // 1
-        registerDependencyTaskForField('ReviewsDone', SimpleFieldWithComment, null) {
+        fieldTask('ReviewsDone', SimpleFieldWithComment, null) {
             if (!config.crucible.userName) throw new IllegalArgumentException('Crucible username not provided or empty')
             if (!config.crucible.password) throw new IllegalArgumentException('Crucible password not provided or empty')
             if (!config.crucible.projectKey) throw new IllegalArgumentException('Crucible project not provided or empty')
@@ -60,16 +60,16 @@ class UpdateWiki extends DefaultTask {
 
         // 2 and 3
         ['PerformanceDegradation',
-         'MemoryLeaksIntroduced'].each this.&registerQualityQuestion
+         'MemoryLeaksIntroduced'].each this.&qualityQuestionTask
 
         // 4
-        registerDependencyTaskForField('IntegrationTestsPass', JenkinsJobStatus, { set { config.integrationTests } })
+        fieldTask('IntegrationTestsPass', JenkinsJobStatus, { set { config.integrationTests } })
 
         // 5, 6, and 7
-        registerDependencyTaskForField('SuccesfulTests', ComparableTestCount, { set Pass })
-        registerDependencyTaskForField('FailedTests', ComparableTestCount, { set Fail })
-        registerDependencyTaskForField('SuccessfulRegressionTestsComment', SuccessfulRegressionTestsComment)
-        registerDependencyTaskForField('TotalRegressionTestsComment', TotalRegressionTestsComment)
+        fieldTask('SuccesfulTests', ComparableTestCount, { set Pass })
+        fieldTask('FailedTests', ComparableTestCount, { set Fail })
+        fieldTask('SuccessfulRegressionTestsComment', SuccessfulRegressionTestsComment)
+        fieldTask('TotalRegressionTestsComment', TotalRegressionTestsComment)
 
         // 8 through 13
         ['NewManualTestCases',
@@ -77,23 +77,23 @@ class UpdateWiki extends DefaultTask {
          'CompliantWithHorizontalComponentRequirements',
          'DocumentationReviewed',
          'TranslatableMessages',
-         'DocumentedAlerts'].each this.&registerQualityQuestion
+         'DocumentedAlerts'].each this.&qualityQuestionTask
 
         // 14
-        registerDependencyTaskForField('UpgradeTested', JenkinsJobStatus, { set { config.upgrade } })
+        fieldTask('UpgradeTested', JenkinsJobStatus, { set { config.upgrade } })
 
         // 15, and 16
         ['MigrationAspectsHandled',
-         'BackwardCompatibilityIssues'].each this.&registerQualityQuestion
+         'BackwardCompatibilityIssues'].each this.&qualityQuestionTask
 
         // 17, 18, 20, and 21
         [High: High, Medium: Normal].each { label, level ->
-            registerDependencyTaskForField('MBViolations' + label, MBVCount, { set level })
-            registerDependencyTaskForField('PMDViolations' + label, PMDCount, { set level })
+            fieldTask('MBViolations' + label, MBVCount, { set level })
+            fieldTask('PMDViolations' + label, PMDCount, { set level })
         }
 
         // 19
-        registerDependencyTaskForField('CompilerWarnings', CWCount)
+        fieldTask('CompilerWarnings', CWCount)
 
         // 22 through 28
         ['SecurityIssuesIntroduced',
@@ -102,12 +102,12 @@ class UpdateWiki extends DefaultTask {
          'UserStoriesAcceptedByPM',
          'UsabilityAcceptedByPM',
          'MultiplatformValidationDone',
-         'ForwardPortingCompleted'].each this.&registerQualityQuestion
+         'ForwardPortingCompleted'].each this.&qualityQuestionTask
 
         // TODO: Final verdict
     }
 
-    Task registerDependencyTaskForField(String field, Class<? extends Task> type, Closure configure = null, Closure action = null) {
+    Task fieldTask(String field, Class<? extends Task> type, Closure configure = null, Closure action = null) {
         def t = project.task("$SUB_TASK_PREFIX$field",
                 group: DROP_MERGE_GROUP,
                 type: type,
@@ -121,12 +121,12 @@ class UpdateWiki extends DefaultTask {
         return t
     }
 
-    Task registerDependencyTaskForField(String field, Closure action) {
-        registerDependencyTaskForField(field, SimpleField, null, action)
+    Task fieldTask(String field, Closure action) {
+        fieldTask(field, SimpleField, null, action)
     }
 
-    Task registerQualityQuestion(String field) {
-        registerDependencyTaskForField(field, SimpleFieldWithComment, null, {
+    Task qualityQuestionTask(String field) {
+        fieldTask(field, SimpleFieldWithComment, null, {
             def input = config.qualityAndProcessQuestions.findByName(field)
             if (!input) {
                 didWork = false
