@@ -1,8 +1,10 @@
 package com.opentext.dropmerge
 
 import com.opentext.dropmerge.dsl.*
-import com.opentext.dropmerge.tasks.*
-import org.gradle.api.*
+import com.opentext.dropmerge.tasks.PrintConfiguration
+import com.opentext.dropmerge.tasks.UpdateWiki
+import org.gradle.api.Plugin
+import org.gradle.api.Project
 
 class DropMergeWikiPlugin implements Plugin<Project> {
 
@@ -14,12 +16,18 @@ class DropMergeWikiPlugin implements Plugin<Project> {
         applyExtensions(project)
     }
 
-    void applyTasks(project) {
-        project.task('printConfiguration', type: PrintConfiguration, group: DROP_MERGE_GROUP, description: 'Print the drop merge configuration.')
-        project.task('updateWiki', type: UpdateWiki, group: DROP_MERGE_GROUP, description: 'Persist the gathered data on the wiki page.')
+    void applyTasks(Project project) {
+        project.task('printConfiguration',
+                type: PrintConfiguration,
+                group: DROP_MERGE_GROUP,
+                description: 'Print the drop merge configuration.')
+        project.task('updateWiki',
+                type: UpdateWiki,
+                group: DROP_MERGE_GROUP,
+                description: 'Persist the gathered data on the wiki page.')
     }
 
-    void applyExtensions(project) {
+    void applyExtensions(Project project) {
         def servers = project.container(JenkinsServer)
         def jobs = project.container(JenkinsJob)
         def regressionTests = project.container(RegressionTest)
