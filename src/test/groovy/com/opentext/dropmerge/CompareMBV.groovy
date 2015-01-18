@@ -1,8 +1,9 @@
 package com.opentext.dropmerge
 
+import com.opentext.dropmerge.jenkins.Jenkins
+import com.opentext.dropmerge.jenkins.JenkinsJob
 import groovy.json.JsonSlurper
 import spock.lang.Specification
-
 
 class CompareMBV extends Specification {
     JenkinsJob mockJobWithMBVReport(String report) {

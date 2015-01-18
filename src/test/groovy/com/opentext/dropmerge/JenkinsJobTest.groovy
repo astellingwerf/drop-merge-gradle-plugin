@@ -1,11 +1,12 @@
 package com.opentext.dropmerge
 
+import com.opentext.dropmerge.jenkins.Jenkins
 import com.opentext.testutils.junit.HttpServerRule
 import groovy.json.JsonBuilder
 import org.junit.Rule
 import spock.lang.Specification
 
-import static com.opentext.dropmerge.TestCount.*
+import static com.opentext.dropmerge.jenkins.TestCount.*
 
 class JenkinsJobTest extends Specification {
     @Rule

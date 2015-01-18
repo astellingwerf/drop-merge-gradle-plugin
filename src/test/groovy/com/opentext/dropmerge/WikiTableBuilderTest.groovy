@@ -1,5 +1,6 @@
 package com.opentext.dropmerge
 
+import com.opentext.dropmerge.wiki.WikiTableBuilder
 import org.junit.Assert
 import org.junit.Test
 
