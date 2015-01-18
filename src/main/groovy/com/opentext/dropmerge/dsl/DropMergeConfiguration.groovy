@@ -1,8 +1,11 @@
 package com.opentext.dropmerge.dsl
 
+import com.opentext.dropmerge.tasks.UpdateWiki
 import org.gradle.api.NamedDomainObjectContainer
+import org.gradle.api.Task
 
 class DropMergeConfiguration {
+    private UpdateWiki updateWikiTask
     NamedDomainObjectContainer<JenkinsServer> jenkinsServers
     NamedDomainObjectContainer<JenkinsJob> jenkinsJobs
     NamedDomainObjectContainer<RegressionTest> regressionTests
@@ -18,10 +21,12 @@ class DropMergeConfiguration {
     Collection<JenkinsJob> upgrade = []
     Collection<JenkinsJob> integrationTests = []
 
-    DropMergeConfiguration(NamedDomainObjectContainer<JenkinsServer> jenkinsServers,
+    DropMergeConfiguration(UpdateWiki updateWikiTask,
+                           NamedDomainObjectContainer<JenkinsServer> jenkinsServers,
                            NamedDomainObjectContainer<JenkinsJob> jenkinsJobs,
                            NamedDomainObjectContainer<RegressionTest> regressionTests,
                            NamedDomainObjectContainer<QualityAndProcessQuestion> qualityAndProcessQuestions) {
+        this.updateWikiTask = updateWikiTask
         this.jenkinsServers = jenkinsServers
         this.jenkinsJobs = jenkinsJobs
         this.regressionTests = regressionTests
@@ -92,6 +97,10 @@ class DropMergeConfiguration {
 
     def qualityQuestions(Closure closure) {
         qualityAndProcessQuestions.configure(closure)
+    }
+
+    Task fieldTask(String field, Closure action) {
+        updateWikiTask.fieldTask(field, action)
     }
 
     @Override

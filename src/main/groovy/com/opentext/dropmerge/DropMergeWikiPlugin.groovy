@@ -9,6 +9,7 @@ import org.gradle.api.Project
 class DropMergeWikiPlugin implements Plugin<Project> {
 
     public static final String DROP_MERGE_GROUP = 'Drop merge'
+    private UpdateWiki updateWikiTask
 
     @Override
     void apply(Project project) {
@@ -21,7 +22,7 @@ class DropMergeWikiPlugin implements Plugin<Project> {
                 type: PrintConfiguration,
                 group: DROP_MERGE_GROUP,
                 description: 'Print the drop merge configuration.')
-        project.task('updateWiki',
+        updateWikiTask = project.task('updateWiki',
                 type: UpdateWiki,
                 group: DROP_MERGE_GROUP,
                 description: 'Persist the gathered data on the wiki page.')
@@ -33,6 +34,6 @@ class DropMergeWikiPlugin implements Plugin<Project> {
         def regressionTests = project.container(RegressionTest)
         def qualityQuestions = project.container(QualityAndProcessQuestion)
 
-        project.extensions.create('dropMerge', DropMergeConfiguration, servers, jobs, regressionTests, qualityQuestions)
+        project.extensions.create('dropMerge', DropMergeConfiguration, updateWikiTask, servers, jobs, regressionTests, qualityQuestions)
     }
 }
