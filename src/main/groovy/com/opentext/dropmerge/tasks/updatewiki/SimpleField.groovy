@@ -27,7 +27,7 @@ public class SimpleField extends DefaultTask {
     }
 
     void setSelectedOption(String option) {
-        result = CordysWiki.selectOption(formField.rawItem, option)
+        result = formField.hasOptions() ? CordysWiki.selectOption(formField.rawItem, option) : option
     }
 
 }

@@ -22,6 +22,8 @@ public class FormField {
 
     public String getContent() { getAndFormatContent(item, type) }
 
+    public boolean hasOptions() { item.attributes().containsKey('sd-options') }
+
     private static String getAndFormatContent(def node, String type) {
         if (type == 'date' || type == 'number') {
             return node.text()
