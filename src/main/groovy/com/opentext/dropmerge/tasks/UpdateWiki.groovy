@@ -35,6 +35,8 @@ class UpdateWiki extends DefaultTask {
             updateAllTask = project.task('updateWiki-all', group: DROP_MERGE_GROUP, description:"Void task to invoke all '$SUB_TASK_PREFIX*' tasks.").dependsOn this
         }
 
+        onlyIf { anyDependsOnTasksDidWork && allDependsOnTasksWereOK }
+
         // 0
         registerDependencyTaskForField('TeamLink') { selectedOption = config.team.name }
         // TODO: drop merge date
@@ -140,11 +142,6 @@ class UpdateWiki extends DefaultTask {
         if (!configuration.wiki.userName) throw new IllegalArgumentException('wiki username not provided or empty')
         if (!configuration.wiki.password) throw new IllegalArgumentException('wiki password not provided or empty')
         if (!configuration.wiki.pageId) throw new IllegalArgumentException('wiki page id not provided or empty')
-
-        if (!anyDependsOnTasksDidWork || !allDependsOnTasksWereOK) {
-            didWork = false
-            return
-        }
 
         resultingData.collectEntries { k, v -> [(k): (!v ? 'null' : v.substring(0, Math.min(v.length(), 100)) + (v.length() > 100 ? '...' : ''))] }.each { k, v ->
             logger.info "${k.padLeft(resultingData.keySet()*.length().max())}: $v"
