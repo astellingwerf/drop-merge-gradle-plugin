@@ -23,4 +23,9 @@ class ComparableTestCount extends SimpleField {
             })
         }
     }
+
+    @Override
+    Collection<String> getFieldNames() {
+        ['Before', 'After'].collect { it -> "$fieldName$it" }
+    }
 }

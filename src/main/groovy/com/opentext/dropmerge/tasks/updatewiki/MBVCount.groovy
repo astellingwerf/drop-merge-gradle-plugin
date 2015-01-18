@@ -42,5 +42,8 @@ class MBVCount extends QualityMetricCount {
         results[commentKey] = comment
     }
 
-
+    @Override
+    Collection<String> getFieldNames() {
+        return super.getFieldNames() + [commentKey]
+    }
 }

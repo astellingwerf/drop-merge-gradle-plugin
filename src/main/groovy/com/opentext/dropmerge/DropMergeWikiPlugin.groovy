@@ -1,6 +1,7 @@
 package com.opentext.dropmerge
 
 import com.opentext.dropmerge.dsl.*
+import com.opentext.dropmerge.tasks.ListWikiFields
 import com.opentext.dropmerge.tasks.PrintConfiguration
 import com.opentext.dropmerge.tasks.UpdateWiki
 import org.gradle.api.Plugin
@@ -22,6 +23,10 @@ class DropMergeWikiPlugin implements Plugin<Project> {
                 type: PrintConfiguration,
                 group: DROP_MERGE_GROUP,
                 description: 'Print the drop merge configuration.')
+        project.task('listWikiFields',
+                type: ListWikiFields,
+                group: DROP_MERGE_GROUP,
+                description: 'Print what field are and aren\'t covered.')
         updateWikiTask = project.task('updateWiki',
                 type: UpdateWiki,
                 group: DROP_MERGE_GROUP,

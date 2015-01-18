@@ -106,4 +106,8 @@ abstract class QualityMetricCount extends SimpleFieldWithComment {
         return "${job.getBuildUrl(LAST_SUCCESSFUL_BUILD)}/$reportUrl/file.${fileName.hashCode()}/"
     }
 
+    @Override
+    Collection<String> getFieldNames() {
+        ['Before', 'After', 'Comment'].collect { it -> "$fieldName$it" }
+    }
 }

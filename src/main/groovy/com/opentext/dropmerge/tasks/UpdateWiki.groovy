@@ -160,7 +160,7 @@ class UpdateWiki extends DefaultTask {
         allDependsOnTasks.any { Task t -> t.state.didWork }
     }
 
-    Collection<Task> getAllDependsOnTasks() {
+    static Collection<Task> getAllDependsOnTasks() {
         updateAllTask.dependsOn.findAll { it instanceof Task }
     }
 

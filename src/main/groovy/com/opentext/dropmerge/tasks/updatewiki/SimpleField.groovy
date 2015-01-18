@@ -30,4 +30,7 @@ public class SimpleField extends DefaultTask {
         result = formField.hasOptions() ? CordysWiki.selectOption(formField.rawItem, option) : option
     }
 
+    Collection<String> getFieldNames() {
+        [fieldName]
+    }
 }

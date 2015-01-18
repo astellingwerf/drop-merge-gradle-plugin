@@ -8,4 +8,9 @@ class SimpleFieldWithComment extends SimpleField {
     String getComment() {
         getResult 'Comment'
     }
+
+    @Override
+    Collection<String> getFieldNames() {
+        super.getFieldNames() + ["${fieldName}Comment"]
+    }
 }
