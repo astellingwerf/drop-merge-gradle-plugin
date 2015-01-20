@@ -17,9 +17,9 @@ public class SimpleField extends DefaultTask {
     }
 
     FormField getFormField() {
-        def wiki = new CordysWiki()
-        wiki.authenticate(config.wiki.userName, config.wiki.password)
-        wiki.getDropMergeFields(config.wiki.pageId)[fieldName]
+        CordysWiki.getInstance(config.wiki.userName, config.wiki.password).with {
+            getDropMergeFields(config.wiki.pageId)[fieldName]
+        }
     }
 
     void setResult(String fieldNameAppendix = '', String value) {

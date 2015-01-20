@@ -19,8 +19,7 @@ class ListWikiFields extends DefaultTask {
             it instanceof SimpleField
         }.sort { it.name }.each { SimpleField sf -> sf.fieldNames.collect { fieldNamesOnTasks.put(it, sf.name) } }
 
-        Set<String> fieldNamesOnWiki = new CordysWiki().with {
-            authenticate(configuration.wiki.userName, configuration.wiki.password)
+        Set<String> fieldNamesOnWiki = CordysWiki.getInstance(configuration.wiki.userName, configuration.wiki.password) .with {
             getDropMergeFields(configuration.wiki.pageId).keySet()
         }
 

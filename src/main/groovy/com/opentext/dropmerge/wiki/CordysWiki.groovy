@@ -12,6 +12,16 @@ import static groovyx.net.http.ContentType.URLENC
 class CordysWiki {
     private HTTPBuilder wikiHttp = new HTTPBuilder('https://wiki.cordys.com')
 
+    private CordysWiki() { }
+
+    @Memoized
+    public static CordysWiki getInstance(String wikiUserName, String wikiPassword) {
+        new CordysWiki().with {
+            authenticate(wikiUserName, wikiPassword)
+            return it
+        }
+    }
+
     public void authenticate(String wikiUserName, String wikiPassword) {
         wikiHttp.client.cookieStore.addCookie(getAuthenticationCookie(wikiUserName, wikiPassword))
     }
