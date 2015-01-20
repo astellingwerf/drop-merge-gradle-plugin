@@ -102,7 +102,7 @@ abstract class QualityMetricCount extends SimpleFieldWithComment {
         }
     }
 
-    private String getFileReportUrl(JenkinsJob job, String reportUrl, String fileName) {
+    String getFileReportUrl(JenkinsJob job, String reportUrl, String fileName) {
         return "${job.getBuildUrl(LAST_SUCCESSFUL_BUILD)}/$reportUrl/file.${fileName.hashCode()}/"
     }
 
