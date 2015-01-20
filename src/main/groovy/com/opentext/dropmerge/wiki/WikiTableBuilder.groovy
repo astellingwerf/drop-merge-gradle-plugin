@@ -82,7 +82,6 @@ class WikiTableBuilder {
     }
 
     static String withHtml(Closure<String> c) {
-
         Writer writer = new StringWriter()
         MarkupBuilder htmlBuilder = newMarkupBuilder(writer)
         c(htmlBuilder)
