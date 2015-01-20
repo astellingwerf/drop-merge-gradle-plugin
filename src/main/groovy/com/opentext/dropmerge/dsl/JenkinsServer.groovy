@@ -14,4 +14,17 @@ class JenkinsServer {
     public String toString() {
         return name + ' => \'' + url + '\'';
     }
+
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (getClass() != o.class) return false
+
+        JenkinsServer that = (JenkinsServer) o
+
+        return url == that.url
+    }
+
+    int hashCode() {
+        return url.hashCode()
+    }
 }

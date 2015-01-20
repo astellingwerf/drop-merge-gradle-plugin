@@ -10,15 +10,18 @@ class JenkinsJob {
 
     JenkinsJob(String name) {
         this.name = name
+        this.jobName = name
     }
 
-    void jobName(String jobName) { this.jobName = jobName }
+    JenkinsJob jobName(String jobName) { this.jobName = jobName; this }
 
-    void server(JenkinsServer server) { this.server = server }
+    JenkinsJob server(JenkinsServer server) { this.server = server; this }
 
-    void description(String description) { this.description = description }
+    JenkinsJob on(JenkinsServer server) { this.server = server; this }
 
-    void matrixValues(Map<String, String> matrixAxes) { this.matrixAxes = matrixAxes }
+    JenkinsJob description(String description) { this.description = description; this }
+
+    JenkinsJob matrixValues(Map<String, String> matrixAxes) { this.matrixAxes = matrixAxes; this }
 
     void addDataType(JsonDataType t) { dataTypes += t }
 
@@ -28,5 +31,26 @@ class JenkinsJob {
                 " on " + server.name +
                 ", description='" + description + '\'' +
                 (matrixAxes ? ", matrixAxes=$matrixAxes" : '');
+    }
+
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (getClass() != o.class) return false
+
+        JenkinsJob that = (JenkinsJob) o
+
+        if (jobName != that.jobName) return false
+        if (matrixAxes != that.matrixAxes) return false
+        if (server != that.server) return false
+
+        return true
+    }
+
+    int hashCode() {
+        int result
+        result = jobName.hashCode()
+        result = 31 * result + server.hashCode()
+        result = 31 * result + (matrixAxes != null ? matrixAxes.hashCode() : 0)
+        return result
     }
 }
