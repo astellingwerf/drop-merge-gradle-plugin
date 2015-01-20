@@ -2,8 +2,6 @@ package com.opentext.dropmerge.tasks
 
 import com.opentext.dropmerge.crucible.Crucible
 import com.opentext.dropmerge.dsl.DropMergeConfiguration
-import com.opentext.dropmerge.jenkins.Jenkins
-import com.opentext.dropmerge.jenkins.JenkinsJob
 import com.opentext.dropmerge.tasks.updatewiki.*
 import com.opentext.dropmerge.wiki.CordysWiki
 import org.gradle.api.DefaultTask
@@ -162,9 +160,5 @@ class UpdateWiki extends DefaultTask {
 
     static Collection<Task> getAllDependsOnTasks() {
         updateAllTask.dependsOn.findAll { it instanceof Task }
-    }
-
-    public static JenkinsJob getJenkinsJob(com.opentext.dropmerge.dsl.JenkinsJob job) {
-        Jenkins.getInstance(job.server.url).withJob(job.jobName, job.matrixAxes)
     }
 }

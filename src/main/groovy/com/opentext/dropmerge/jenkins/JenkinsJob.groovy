@@ -2,12 +2,15 @@ package com.opentext.dropmerge.jenkins
 
 import groovy.json.JsonSlurper
 import groovy.transform.Memoized
+import org.gradle.api.logging.Logger
 
 import java.text.SimpleDateFormat
 
 class JenkinsJob {
     public static final String LAST_COMPLETED_BUILD = 'lastCompletedBuild'
     public static final String LAST_SUCCESSFUL_BUILD = 'lastSuccessfulBuild'
+
+	Logger logger
 
     private final Jenkins onInstance;
     private final String name
@@ -106,16 +109,18 @@ class JenkinsJob {
         if (jsonPath) url += "?tree=$jsonPath"
         else if (depth) url += "?depth=$depth"
 
-        return slurpJson(url)
+        return slurpJson(url, logger)
     }
 
     @Memoized
-    private static def slurpJson(String url) {
+    private static def slurpJson(String url, Logger logger) {
+		logger?.info('Reading from {}', url)
         new JsonSlurper().parseText(new URL(url).text)
     }
 
     @Memoized
-    private static String getText(String url) {
+    private static String getText(String url, Logger logger) {
+		logger?.info('Reading from {}', url)
         new URL(url).text
     }
 
@@ -150,7 +155,7 @@ class JenkinsJob {
 
     public Date getBuildTimestamp(String build) {
         final String format = 'yyMMddHHmmssZ'
-        new SimpleDateFormat(format).parse(getText(getBuildUrl(build) + "/buildTimestamp?format=$format"))
+        new SimpleDateFormat(format).parse(getText(getBuildUrl(build) + "/buildTimestamp?format=$format", logger))
     }
 
     @Override

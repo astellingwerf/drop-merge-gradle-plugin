@@ -12,7 +12,6 @@ import java.text.SimpleDateFormat
 
 import static com.opentext.dropmerge.jenkins.TestCount.*
 import static com.opentext.dropmerge.jenkins.Util.getJenkinsUrlWithStatus
-import static com.opentext.dropmerge.tasks.UpdateWiki.getJenkinsJob
 
 class SuccessfulRegressionTestsComment extends SimpleField {
 

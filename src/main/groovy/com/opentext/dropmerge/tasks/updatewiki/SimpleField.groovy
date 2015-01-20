@@ -1,7 +1,11 @@
 package com.opentext.dropmerge.tasks.updatewiki
 
 import com.opentext.dropmerge.dsl.DropMergeConfiguration
+import com.opentext.dropmerge.dsl.JenkinsJob as JobInDsl
+import com.opentext.dropmerge.jenkins.Jenkins
+import com.opentext.dropmerge.jenkins.JenkinsJob
 import com.opentext.dropmerge.wiki.CordysWiki
+import com.opentext.dropmerge.wiki.FormField
 import org.gradle.api.DefaultTask
 
 public class SimpleField extends DefaultTask {
@@ -12,7 +16,7 @@ public class SimpleField extends DefaultTask {
         return project.extensions.dropMerge
     }
 
-    def getFormField() {
+    FormField getFormField() {
         def wiki = new CordysWiki()
         wiki.authenticate(config.wiki.userName, config.wiki.password)
         wiki.getDropMergeFields(config.wiki.pageId)[fieldName]
@@ -33,4 +37,10 @@ public class SimpleField extends DefaultTask {
     Collection<String> getFieldNames() {
         [fieldName]
     }
+
+	JenkinsJob getJenkinsJob(JobInDsl job) {
+		JenkinsJob jenkinsJob = Jenkins.getInstance(job.server.url).withJob(job.jobName, job.matrixAxes)
+		jenkinsJob.logger = logger;
+		return jenkinsJob
+	}
 }

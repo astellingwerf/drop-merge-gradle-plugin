@@ -9,7 +9,6 @@ import com.opentext.dropmerge.wiki.WikiTableBuilder
 import org.gradle.api.tasks.TaskAction
 
 import static com.opentext.dropmerge.jenkins.JenkinsJob.LAST_SUCCESSFUL_BUILD
-import static com.opentext.dropmerge.tasks.UpdateWiki.getJenkinsJob
 import static com.opentext.dropmerge.wiki.WikiTableBuilder.withHtml
 
 abstract class QualityMetricCount extends SimpleFieldWithComment {
