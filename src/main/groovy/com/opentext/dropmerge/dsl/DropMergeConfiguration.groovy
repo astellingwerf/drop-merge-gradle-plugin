@@ -85,6 +85,8 @@ class DropMergeConfiguration {
 
     def upgrade(Collection<JenkinsJob> jobs) {
         this.upgrade.addAll(jobs)
+        jobs*.addDataType JsonDataType.Color
+        jobs*.addDataType JsonDataType.Success
     }
 
     def integrationTests(JenkinsJob job) {
@@ -93,6 +95,8 @@ class DropMergeConfiguration {
 
     def integrationTests(Collection<JenkinsJob> jobs) {
         this.integrationTests.addAll(jobs)
+        jobs*.addDataType JsonDataType.Color
+        jobs*.addDataType JsonDataType.Success
     }
 
     def qualityQuestions(Closure closure) {

@@ -4,7 +4,7 @@ enum JsonDataType {
     Tests,
     PMD,
     MBV,
-    CompilerWarnings
-
-
+    CompilerWarnings,
+    Color,
+    Success,
 }
