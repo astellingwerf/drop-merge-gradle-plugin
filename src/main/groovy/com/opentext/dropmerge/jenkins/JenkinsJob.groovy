@@ -144,7 +144,7 @@ class JenkinsJob {
             "$jobUrl/$build"
     }
 
-    public def getMatrixSubJobs() {
+    public List<JenkinsJob> getMatrixSubJobs() {
         return jsonForJob(null, null, 'activeConfigurations[name]')['activeConfigurations'].collect {
             onInstance.withJob("$name/${it.name}")
         }
