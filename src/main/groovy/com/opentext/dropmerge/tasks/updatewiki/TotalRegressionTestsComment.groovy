@@ -1,7 +1,6 @@
 package com.opentext.dropmerge.tasks.updatewiki
 
 import com.opentext.dropmerge.dsl.RegressionTest
-import com.opentext.dropmerge.tasks.UpdateWiki
 import com.opentext.dropmerge.wiki.WikiTableBuilder
 import org.gradle.api.tasks.TaskAction
 

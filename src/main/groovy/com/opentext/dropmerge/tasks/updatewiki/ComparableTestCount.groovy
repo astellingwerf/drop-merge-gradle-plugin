@@ -4,8 +4,6 @@ import com.opentext.dropmerge.dsl.RegressionTest
 import com.opentext.dropmerge.jenkins.TestCount
 import org.gradle.api.tasks.TaskAction
 
-import static com.opentext.dropmerge.tasks.UpdateWiki.getJenkinsJob
-
 class ComparableTestCount extends SimpleField {
     TestCount testCount
 
