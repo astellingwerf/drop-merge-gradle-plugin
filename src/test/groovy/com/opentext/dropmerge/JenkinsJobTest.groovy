@@ -87,7 +87,7 @@ class JenkinsJobTest extends Specification {
             jenkinsInstance.withJob(JOB_NAME, [component: 'a']).getTestFigure(it)
         } == ['0', '1', '2']
 
-        jenkinsServer.invocationCount == 5
+        jenkinsServer.invocationCount == 7
     }
 
     def 'color'() {
