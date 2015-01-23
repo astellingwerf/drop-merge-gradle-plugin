@@ -1,6 +1,7 @@
 package com.opentext.dropmerge.tasks.updatewiki
 
 import com.opentext.dropmerge.dsl.JenkinsJob
+import com.opentext.dropmerge.tasks.jenkins.UpdateResponseCache
 import org.gradle.api.tasks.TaskAction
 
 import static com.opentext.dropmerge.jenkins.JenkinsJob.LAST_COMPLETED_BUILD
@@ -13,6 +14,9 @@ class JenkinsJobStatus extends SimpleFieldWithComment {
 
     void set(Closure<Collection<JenkinsJob>> s) {
         selector = s
+        dependsOn {
+            jobs.collect { UpdateResponseCache.getTaskName(it) }
+        }
     }
 
     @TaskAction
