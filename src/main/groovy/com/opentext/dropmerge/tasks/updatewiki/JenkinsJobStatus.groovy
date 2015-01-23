@@ -6,7 +6,6 @@ import org.gradle.api.tasks.TaskAction
 
 import static com.opentext.dropmerge.jenkins.JenkinsJob.LAST_COMPLETED_BUILD
 import static com.opentext.dropmerge.jenkins.Util.getJenkinsUrlWithStatus
-import static com.opentext.dropmerge.tasks.UpdateWiki.getJenkinsJob
 import static com.opentext.dropmerge.wiki.WikiTableBuilder.withHtml
 
 class JenkinsJobStatus extends SimpleFieldWithComment {
