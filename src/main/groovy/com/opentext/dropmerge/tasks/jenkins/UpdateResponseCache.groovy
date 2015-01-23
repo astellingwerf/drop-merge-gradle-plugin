@@ -38,4 +38,6 @@ class UpdateResponseCache extends DefaultTask {
 
     static String getTaskName(JenkinsJob job) { "updateResponseCache-${job.name}" }
 
+    static Collection<String> getTaskNames(Collection<JenkinsJob> jobs) { jobs.collect { getTaskName(it) } }
+
 }

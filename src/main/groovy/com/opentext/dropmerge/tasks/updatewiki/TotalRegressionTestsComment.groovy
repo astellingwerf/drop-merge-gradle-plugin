@@ -1,12 +1,22 @@
 package com.opentext.dropmerge.tasks.updatewiki
 
 import com.opentext.dropmerge.dsl.RegressionTest
+import com.opentext.dropmerge.tasks.jenkins.UpdateResponseCache
 import com.opentext.dropmerge.wiki.WikiTableBuilder
 import org.gradle.api.tasks.TaskAction
 
 import static com.opentext.dropmerge.jenkins.Jenkins.getTestDiffsPerSuite
 
 class TotalRegressionTestsComment extends SimpleField {
+
+    TotalRegressionTestsComment() {
+        dependsOn {
+            UpdateResponseCache.getTaskNames(config.regressionTests.collectMany { RegressionTest tests ->
+                tests.comparables.collectMany { it.left + it.right }
+            })
+        }
+    }
+
     @TaskAction
     void createTable() {
         result = WikiTableBuilder.table { table ->

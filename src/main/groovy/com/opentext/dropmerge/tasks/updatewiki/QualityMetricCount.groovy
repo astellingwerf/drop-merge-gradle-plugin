@@ -5,6 +5,7 @@ import com.opentext.dropmerge.dsl.WipTrunkPair
 import com.opentext.dropmerge.jenkins.Jenkins
 import com.opentext.dropmerge.jenkins.JenkinsJob
 import com.opentext.dropmerge.jenkins.WarningLevel
+import com.opentext.dropmerge.tasks.jenkins.UpdateResponseCache
 import com.opentext.dropmerge.wiki.WikiTableBuilder
 import org.gradle.api.tasks.TaskAction
 
@@ -17,6 +18,12 @@ abstract class QualityMetricCount extends SimpleFieldWithComment {
 
     void set(WarningLevel l) {
         level = l
+    }
+
+    QualityMetricCount() {
+        dependsOn {
+            UpdateResponseCache.getTaskNames([metricPair.trunk, metricPair.wip])
+        }
     }
 
     protected List<String> getPriorities() { [upperCaseLevel] }

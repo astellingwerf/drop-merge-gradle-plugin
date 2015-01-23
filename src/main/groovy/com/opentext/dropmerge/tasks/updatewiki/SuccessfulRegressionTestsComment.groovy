@@ -2,6 +2,7 @@ package com.opentext.dropmerge.tasks.updatewiki
 
 import com.opentext.dropmerge.dsl.RegressionTest
 import com.opentext.dropmerge.jenkins.JenkinsJob
+import com.opentext.dropmerge.tasks.jenkins.UpdateResponseCache
 import com.opentext.dropmerge.wiki.WikiTableBuilder
 import groovy.time.TimeCategory
 import groovy.xml.MarkupBuilder
@@ -14,6 +15,14 @@ import static com.opentext.dropmerge.jenkins.TestCount.*
 import static com.opentext.dropmerge.jenkins.Util.getJenkinsUrlWithStatus
 
 class SuccessfulRegressionTestsComment extends SimpleField {
+
+    SuccessfulRegressionTestsComment() {
+        dependsOn {
+            UpdateResponseCache.getTaskNames(config.regressionTests.collectMany { RegressionTest tests ->
+                tests.comparables.collectMany { it.left + it.right } + tests.others
+            })
+        }
+    }
 
     @TaskAction
     void createTables() {

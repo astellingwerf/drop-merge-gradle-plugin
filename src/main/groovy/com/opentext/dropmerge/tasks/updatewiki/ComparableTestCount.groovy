@@ -2,6 +2,7 @@ package com.opentext.dropmerge.tasks.updatewiki
 
 import com.opentext.dropmerge.dsl.RegressionTest
 import com.opentext.dropmerge.jenkins.TestCount
+import com.opentext.dropmerge.tasks.jenkins.UpdateResponseCache
 import org.gradle.api.tasks.TaskAction
 
 class ComparableTestCount extends SimpleField {
@@ -9,6 +10,14 @@ class ComparableTestCount extends SimpleField {
 
     void set(TestCount tc) {
         testCount = tc
+    }
+
+    ComparableTestCount() {
+        dependsOn {
+            UpdateResponseCache.getTaskNames(config.regressionTests.collectMany { RegressionTest tests ->
+                tests.comparables.collectMany { it.left + it.right }
+            })
+        }
     }
 
     @TaskAction

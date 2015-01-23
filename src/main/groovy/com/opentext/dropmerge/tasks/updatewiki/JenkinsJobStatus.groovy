@@ -14,7 +14,7 @@ class JenkinsJobStatus extends SimpleFieldWithComment {
     void set(Closure<Collection<JenkinsJob>> s) {
         selector = s
         dependsOn {
-            jobs.collect { UpdateResponseCache.getTaskName(it) }
+            UpdateResponseCache.getTaskNames(jobs)
         }
     }
 
