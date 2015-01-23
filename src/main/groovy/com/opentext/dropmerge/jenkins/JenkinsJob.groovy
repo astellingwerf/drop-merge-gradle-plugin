@@ -12,15 +12,18 @@ class JenkinsJob {
     public static final String LAST_SUCCESSFUL_BUILD = 'lastSuccessfulBuild'
 
 	Logger logger
+    ResponseReader responseReader
 
     private final Jenkins onInstance;
     private final String name
     private final Map<String, String> matrixAxes
 
-    JenkinsJob(Jenkins onInstance, String name, Map<String, String> matrixAxes = null) {
+    JenkinsJob(Jenkins onInstance, String name, Map<String, String> matrixAxes = null, ResponseReader responseReader = null) {
         this.onInstance = onInstance
         this.name = name
         this.matrixAxes = matrixAxes
+
+        this.responseReader = responseReader ?: new ResponseCacheReader()
 
         if (matrixAxes) {
             List<String[]> matches = jsonForJob(null, null, 'activeConfigurations[name]')['activeConfigurations']
@@ -110,19 +113,17 @@ class JenkinsJob {
         if (jsonPath) url += "?tree=$jsonPath"
         else if (depth) url += "?depth=$depth"
 
-        return slurpJson(url, logger)
+        return slurpJson(url, logger, responseReader)
     }
 
     @Memoized
-    private static def slurpJson(String url, Logger logger) {
-		logger?.info('Reading from {}', url)
-        new JsonSlurper().parseText(new URL(url).text)
+    private static def slurpJson(String url, Logger logger, ResponseReader reader) {
+        new JsonSlurper().parseText(getText(url, logger, reader))
     }
 
     @Memoized
-    private static String getText(String url, Logger logger) {
-		logger?.info('Reading from {}', url)
-        new URL(url).text
+    private static String getText(String url, Logger logger, ResponseReader reader) {
+        reader.getText(url, logger)
     }
 
     private def jsonForJob(String subPage, String jsonPath) {
@@ -146,7 +147,7 @@ class JenkinsJob {
 
     public List<JenkinsJob> getMatrixSubJobs() {
         return jsonForJob(null, null, 'activeConfigurations[name]')['activeConfigurations'].collect {
-            onInstance.withJob("$name/${it.name}")
+            onInstance.withJob("$name/${it.name}", null, responseReader)
         }
     }
 
@@ -156,7 +157,7 @@ class JenkinsJob {
 
     public Date getBuildTimestamp(String build) {
         final String format = 'yyMMddHHmmssZ'
-        new SimpleDateFormat(format).parse(getText(getBuildUrl(build) + "/buildTimestamp?format=$format", logger))
+        new SimpleDateFormat(format).parse(getText(getBuildUrl(build) + "/buildTimestamp?format=$format", logger, responseReader))
     }
 
     @Override

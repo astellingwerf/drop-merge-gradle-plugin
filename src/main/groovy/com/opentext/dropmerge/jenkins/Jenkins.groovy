@@ -21,8 +21,8 @@ public class Jenkins {
     }
 
     @Memoized
-    public JenkinsJob withJob(String name, Map<String, String> matrixAxes = null) {
-        return new JenkinsJob(this, name, matrixAxes);
+    public JenkinsJob withJob(String name, Map<String, String> matrixAxes = null, ResponseReader responseReader = null) {
+        return new JenkinsJob(this, name, matrixAxes, responseReader);
     }
 
     String getRootUrl() {
