@@ -7,6 +7,7 @@ import org.gradle.api.logging.Logger
 import java.text.SimpleDateFormat
 
 class JenkinsJob {
+    public static final String LAST_BUILD = 'lastBuild'
     public static final String LAST_COMPLETED_BUILD = 'lastCompletedBuild'
     public static final String LAST_SUCCESSFUL_BUILD = 'lastSuccessfulBuild'
 
