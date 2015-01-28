@@ -3,6 +3,7 @@ package com.opentext.dropmerge.tasks.jenkins
 import com.opentext.dropmerge.dsl.JenkinsJob as JobInDsl
 import com.opentext.dropmerge.dsl.JsonDataType
 import com.opentext.dropmerge.jenkins.*
+import org.gradle.api.logging.Logger
 
 import static com.opentext.dropmerge.jenkins.JenkinsJob.LAST_COMPLETED_BUILD
 
@@ -25,7 +26,12 @@ class JobResponseCache implements Serializable {
         this.types = job.dataTypes
         this.matrixAxes = job.matrixAxes
 
-        this.dateLastCompletedBuild = Jenkins.getInstance(serverUrl).withJob(jobName, matrixAxes).getBuildTimestamp(LAST_COMPLETED_BUILD)
+        this.dateLastCompletedBuild = Jenkins.getInstance(serverUrl).withJob(jobName, matrixAxes, new ResponseReader() {
+            @Override
+            String getText(String url, Logger logger) {
+                new URL(url).text
+            }
+        }).getBuildTimestamp(LAST_COMPLETED_BUILD)
     }
 
     boolean equals(o) {
