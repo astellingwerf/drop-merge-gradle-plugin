@@ -102,7 +102,19 @@ class UpdateWiki extends DefaultTask {
          'MultiplatformValidationDone',
          'ForwardPortingCompleted'].each this.&qualityQuestionTask
 
-        // TODO: Final verdict
+        [ArchitectName: { it.architects },
+         ProductManagerName: { it.productManager },
+         ScrumMasterName: { it.scrumMaster }].each { field, selector ->
+            fieldTask(field) {
+                result = ' ' + selector(config.team).collect { shortName ->
+                    withHtml { html ->
+                        html.'ac:link' {
+                            'ri:user'('ri:username': shortName)
+                        }
+                    }
+                }.join(', ')
+            }
+        }
     }
 
     Task fieldTask(String field, Class<? extends Task> type, Closure configure = null, Closure action = null) {
