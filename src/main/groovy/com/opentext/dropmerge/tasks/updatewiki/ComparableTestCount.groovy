@@ -33,6 +33,6 @@ class ComparableTestCount extends SimpleField {
 
     @Override
     Collection<String> getFieldNames() {
-        ['Before', 'After'].collect { it -> "$fieldName$it" }
+        ['Before', 'After'].collect { "$fieldName$it" }
     }
 }
