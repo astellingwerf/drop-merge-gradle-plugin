@@ -6,7 +6,7 @@ class IconCSS {
 
     @Memoized
     public static String getStyle() {
-        StringBuilder sb = new StringBuilder('.jenkinsJobStatus{background-repeat: no-repeat; padding-left: 19px; width: 16px; height: 16px;}').append System.lineSeparator()
+        StringBuilder sb = new StringBuilder('.jenkinsJobStatus{background-repeat: no-repeat; padding-left: 19px; padding-top: 3px; width: 16px; height: 16px;}').append System.lineSeparator()
 
         def extraStyles = [grey: ['aborted', 'disabled'], grey_anime: ['aborted_anime', 'disabled_anime']]
 		def images = ['blue','yellow','red','grey'].collectMany { ["${it}.png", "${it}_anime.gif"] }
