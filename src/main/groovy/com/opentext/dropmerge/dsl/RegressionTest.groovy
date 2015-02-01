@@ -2,6 +2,8 @@ package com.opentext.dropmerge.dsl
 
 import org.apache.commons.lang3.tuple.Pair
 
+import java.util.regex.Pattern
+
 // TODO: Justifications
 // TODO: Exclusion rules
 class RegressionTest {
@@ -9,6 +11,7 @@ class RegressionTest {
 
     Collection<Pair<Collection<JenkinsJob>, Collection<JenkinsJob>>> comparables = []
     Collection<JenkinsJob> others = []
+    Collection<Closure<Boolean>> exclusions = []
 
     RegressionTest(String name) {
         this.name = name
@@ -24,6 +27,14 @@ class RegressionTest {
 
     void others(JenkinsJob... others) {
         this.others.addAll(others)
+    }
+
+    void filter(Pattern pattern) {
+        filter { String className -> pattern.matcher(className).matches() }
+    }
+
+    void filter(Closure<Boolean> closure) {
+        exclusions += closure
     }
 
     @Override
