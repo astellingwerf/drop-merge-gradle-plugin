@@ -48,6 +48,7 @@ class SuccessfulRegressionTestsComment extends SimpleField {
                 }
             }
             table << ['All', 'All', "$passCount", "$failCount", "$skipCount", '']
+            return
         } + WikiTableBuilder.table { WikiTableBuilder table ->
             config.regressionTests.each { RegressionTest tests ->
                 tests.comparables.each {
@@ -67,6 +68,7 @@ class SuccessfulRegressionTestsComment extends SimpleField {
                     }
                 }
             }
+            return
         } + WikiTableBuilder.withHtml { MarkupBuilder html ->
             html.style IconCSS.style
         }

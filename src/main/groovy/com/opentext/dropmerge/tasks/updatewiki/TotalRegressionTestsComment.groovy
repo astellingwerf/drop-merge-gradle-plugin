@@ -36,6 +36,7 @@ class TotalRegressionTestsComment extends SimpleField {
                     }
                 }
             }
+            return
         }
     }
 }
