@@ -54,32 +54,6 @@ class JenkinsJob {
         jsonForJob(report, prop)[prop.jsonField].toString()
     }
 
-    public String getTestFigure(TestCount testCount) {
-        if (matrixSubJobs.isEmpty())
-            return getPropertyOfJobWithinReports('testReport', testCount)
-        else
-            return getTestFigureMultiConfig(testCount)
-    }
-
-    public String getTestFigureMultiConfig(TestCount testCount) {
-        int total = getMatrixSubJobs().sum {
-            it.getPropertyOfJobWithinReports('testReport', testCount) as int
-        }
-        return "$total"
-    }
-
-    public int getTestFigure(TestCount testCount, TestCount... minus) {
-        return minus.inject(getTestFigure(testCount) as int) {
-            carry, it -> carry - (getTestFigure(it) as int)
-        }
-    }
-
-    public int getTestFigureMultiConfig(TestCount testCount, TestCount... minus) {
-        return minus.inject(getTestFigureMultiConfig(testCount) as int) {
-            carry, it -> carry - (getTestFigureMultiConfig(it) as int)
-        }
-    }
-
     public def getTestReport() {
         jsonForJob(LAST_SUCCESSFUL_BUILD, 'testReport', 'suites[name,cases[status]]')
     }
@@ -169,5 +143,38 @@ class JenkinsJob {
             n = "'$name'"
         }
         return "$n on " + (new URL(onInstance.rootUrl).host - ~/\.vanenburg\.com$/);
+    }
+    
+    public int getTestFigure(TestCount testCount, Collection<Closure<Boolean>> suiteExclusions) {
+        if (matrixSubJobs.isEmpty())
+            return getTestCount(suiteExclusions)[testCount] ?: 0
+        else
+            return matrixSubJobs.sum { it.getTestFigure(testCount, suiteExclusions) }
+    }
+
+    public Map<TestCount, Integer> getTestCount(Collection<Closure<Boolean>> suiteExclusions) {
+        getTestCountBySuite(suiteExclusions).inject([:]) { result, kvp ->
+            Map<TestCount, Integer> newResult = kvp.value.keySet().collectEntries { [(it): 0] } + result
+            kvp.value.each { k, v -> newResult[k] += v }
+            return newResult
+        }
+    }
+
+    @Memoized
+    public Map<String, Map<TestCount, Integer>> getTestCountBySuite(Collection<Closure<Boolean>> suiteExclusions) {
+        return testReport.suites
+                .collectEntries { suite ->
+            if (!suiteExclusions.any { exclude -> exclude(suite.name) })
+                [(suite.name): (suite.cases.countBy { c ->
+                    switch (c.status) {
+                        case 'FAILED': return TestCount.Fail
+                        case 'SKIPPED': return TestCount.Skip
+                        case 'PASSED': return TestCount.Pass
+                    }
+                })]
+            else
+                [:]
+        }
+        .findAll { it.value*.value.sum() > 0 }
     }
 }

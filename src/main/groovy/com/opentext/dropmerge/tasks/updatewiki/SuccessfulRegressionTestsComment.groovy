@@ -35,14 +35,14 @@ class SuccessfulRegressionTestsComment extends SimpleField {
                 Collection<JobInDsl> jobs = tests.comparables.collectMany { it.left } + tests.others
                 jobs.each { JobInDsl job ->
                     JenkinsJob jj = getJenkinsJob(job)
-                    passCount += jj.getTestFigure(Pass) as int
-                    failCount += jj.getTestFigure(Fail) as int
-                    skipCount += jj.getTestFigure(Skip) as int
+                    passCount += jj.getTestFigure(Pass, tests.exclusions)
+                    failCount += jj.getTestFigure(Fail, tests.exclusions)
+                    skipCount += jj.getTestFigure(Skip, tests.exclusions)
                     table << [tests.name,
                               job.description,
-                              jj.getTestFigure(Pass),
-                              jj.getTestFigure(Fail),
-                              jj.getTestFigure(Skip),
+                              jj.getTestFigure(Pass, tests.exclusions),
+                              jj.getTestFigure(Fail, tests.exclusions),
+                              jj.getTestFigure(Skip, tests.exclusions),
                               getJenkinsUrlWithStatus(jj)
                     ]
                 }

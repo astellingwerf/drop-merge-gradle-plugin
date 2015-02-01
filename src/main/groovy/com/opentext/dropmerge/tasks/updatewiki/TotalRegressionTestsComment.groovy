@@ -25,7 +25,10 @@ class TotalRegressionTestsComment extends SimpleField {
                     String wipOS = it.left*.description.unique().join(' / ')
                     getTestDiffsPerSuite(
                             it.right.collect(this.&getJenkinsJob),
-                            it.left.collect(this.&getJenkinsJob)).each { suite, difference ->
+                            it.left.collect(this.&getJenkinsJob))
+                            .findAll { suite, difference ->
+                        !tests.exclusions.any { it(suite) }
+                    }.each { suite, difference ->
                         table.addRow(
                                 'Suite / Test': suite,
                                 'Difference': String.format('%+d', difference),

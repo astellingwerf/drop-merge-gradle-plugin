@@ -62,7 +62,6 @@ class JobResponseCache implements Serializable {
     public void cache(ResponseReader responseReader) {
         JenkinsJob job = Jenkins.getInstance(serverUrl).withJob(jobName, matrixAxes, responseReader)
         if (types.contains(JsonDataType.Tests)) {
-            (TestCount.values() - TestCount.Total).each(job.&getTestFigure)
             job.color
             job.getBuildTimestamp(LAST_COMPLETED_BUILD)
             job.testReport

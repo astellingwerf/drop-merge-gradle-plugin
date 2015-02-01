@@ -25,7 +25,7 @@ class ComparableTestCount extends SimpleField {
         [Before: { it.right }, After: { it.left }].each { appendix, projection ->
             setResult appendix, String.valueOf(config.regressionTests.sum { RegressionTest tests ->
                 tests.comparables.collectMany(projection).sum {
-                    getJenkinsJob(it).getTestFigure(testCount) as int
+                    getJenkinsJob(it).getTestFigure(testCount, tests.exclusions)
                 }
             })
         }
