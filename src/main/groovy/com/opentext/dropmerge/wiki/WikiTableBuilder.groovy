@@ -65,7 +65,7 @@ class WikiTableBuilder {
                                 td(class: 'confluenceTd') {
                                     if (map[header] instanceof Closure)
                                         delegate.with map[header]
-                                    else if (map[header])
+                                    else if (map[header] != null)
                                         mkp.yield map[header]
                                 }
                             }
