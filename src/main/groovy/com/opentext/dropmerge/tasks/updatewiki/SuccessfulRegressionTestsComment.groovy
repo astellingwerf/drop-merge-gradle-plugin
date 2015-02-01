@@ -1,6 +1,7 @@
 package com.opentext.dropmerge.tasks.updatewiki
 
 import com.opentext.dropmerge.dsl.RegressionTest
+import com.opentext.dropmerge.dsl.JenkinsJob as JobInDsl
 import com.opentext.dropmerge.jenkins.JenkinsJob
 import com.opentext.dropmerge.tasks.jenkins.UpdateResponseCache
 import com.opentext.dropmerge.wiki.WikiTableBuilder
@@ -31,14 +32,13 @@ class SuccessfulRegressionTestsComment extends SimpleField {
 
             int passCount = 0, failCount = 0, skipCount = 0
             config.regressionTests.collectEntries { RegressionTest tests ->
-                [(tests.name): tests.comparables.collectMany { it.left } + tests.others]
-            }.each { String type, Collection<com.opentext.dropmerge.dsl.JenkinsJob> jobs ->
-                jobs.each { com.opentext.dropmerge.dsl.JenkinsJob job ->
+                Collection<JobInDsl> jobs = tests.comparables.collectMany { it.left } + tests.others
+                jobs.each { JobInDsl job ->
                     JenkinsJob jj = getJenkinsJob(job)
                     passCount += jj.getTestFigure(Pass) as int
                     failCount += jj.getTestFigure(Fail) as int
                     skipCount += jj.getTestFigure(Skip) as int
-                    table << [type,
+                    table << [tests.name,
                               job.description,
                               jj.getTestFigure(Pass),
                               jj.getTestFigure(Fail),
@@ -53,7 +53,7 @@ class SuccessfulRegressionTestsComment extends SimpleField {
             config.regressionTests.each { RegressionTest tests ->
                 tests.comparables.each {
                     String wipDescription = it.left*.description.unique().join(' / ')
-                    it.right.each { com.opentext.dropmerge.dsl.JenkinsJob job ->
+                    it.right.each { JobInDsl job ->
                         JenkinsJob jj = getJenkinsJob(job)
                         Date ts = jj.getBuildTimestamp(JenkinsJob.LAST_COMPLETED_BUILD)
                         String timestampText = new SimpleDateFormat('MMM dd \'at\' HH:mm z').format(ts)
