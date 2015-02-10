@@ -167,9 +167,10 @@ class JenkinsJob {
             if (!suiteExclusions.any { exclude -> exclude(suite.name) })
                 [(suite.name): (suite.cases.countBy { c ->
                     switch (c.status) {
-                        case 'FAILED': return TestCount.Fail
+                        case 'FAILED': case 'REGRESSION': return TestCount.Fail
                         case 'SKIPPED': return TestCount.Skip
-                        case 'PASSED': return TestCount.Pass
+                        case 'PASSED': case 'FIXED': return TestCount.Pass
+                        default: logger.warn("Encountered unexpected test state '{}'.", c.status)
                     }
                 })]
             else
