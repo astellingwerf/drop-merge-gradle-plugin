@@ -107,6 +107,10 @@ class DropMergeConfiguration {
         updateWikiTask.fieldTask(field, action)
     }
 
+    Task fieldTask(String field) {
+        updateWikiTask.project.tasks.getByName("${UpdateWiki.SUB_TASK_PREFIX}${field}")
+    }
+
     @Override
     public String toString() {
         return "DropMergeConfiguration {\n" +
