@@ -163,4 +163,7 @@ class CordysWiki {
         return jsonResult.toString()
     }
 
+    def getContent(int pageId) {
+        wikiHttp.get(path: "/rest/prototype/1/content/$pageId", query: [expand:'children'])
+    }
 }
