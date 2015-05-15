@@ -29,11 +29,11 @@ class RegressionTest {
         this.others.addAll(others)
     }
 
-    void filter(Pattern pattern) {
-        filter { String className -> pattern.matcher(className).matches() }
+    void exclude(Pattern pattern) {
+        exclude { String className -> pattern.matcher(className).matches() }
     }
 
-    void filter(Closure<Boolean> closure) {
+    void exclude(Closure<Boolean> closure) {
         exclusions += closure
     }
 
